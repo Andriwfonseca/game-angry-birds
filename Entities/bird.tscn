@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://b0lvw4xlwe604"]
+
+[ext_resource type="Script" uid="uid://igpgyh6o380r" path="res://scripts/bird.gd" id="1_ldtqw"]
+[ext_resource type="Texture2D" uid="uid://sbmfjbwi12yq" path="res://assets/bird.png" id="1_nsahm"]
+[ext_resource type="Texture2D" uid="uid://dicdtsv5bq8mq" path="res://assets/bird_grayscale.png" id="3_1s5k2"]
+[ext_resource type="Texture2D" uid="uid://cpsefjrhps3fx" path="res://assets/belly_grayscale.png" id="4_fywxo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wlxo6"]
+radius = 23.0
+
+[node name="Bird" type="RigidBody2D"]
+input_pickable = true
+freeze = true
+script = ExtResource("1_ldtqw")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(-3, 0)
+shape = SubResource("CircleShape2D_wlxo6")
+
+[node name="Bird" type="Sprite2D" parent="."]
+position = Vector2(-3, 0)
+texture = ExtResource("1_nsahm")
+
+[node name="Body" type="Sprite2D" parent="Bird"]
+modulate = Color(1, 0.6862745, 0.23529412, 1)
+texture = ExtResource("3_1s5k2")
+
+[node name="Belly" type="Sprite2D" parent="Bird"]
+modulate = Color(0.7137255, 0.7294118, 0.5411765, 1)
+texture = ExtResource("4_fywxo")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
