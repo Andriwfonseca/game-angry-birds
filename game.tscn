@@ -1,10 +1,12 @@
-[gd_scene load_steps=11 format=4 uid="uid://d2ceoxb6g2u0h"]
+[gd_scene load_steps=13 format=4 uid="uid://d2ceoxb6g2u0h"]
 
 [ext_resource type="PackedScene" uid="uid://b0lvw4xlwe604" path="res://Entities/bird.tscn" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://ddy1c77e634r" path="res://misc/floor.tscn" id="2_e2o6t"]
 [ext_resource type="Texture2D" uid="uid://ccmh4avexkj30" path="res://assets/grass.png" id="3_feb5d"]
 [ext_resource type="Texture2D" uid="uid://c51jyg4xxn4gs" path="res://assets/slingshot.png" id="4_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://cjiw81fd8gblv" path="res://misc/crate.tscn" id="5_7jktm"]
+[ext_resource type="Texture2D" uid="uid://cwbcdcibqhqg4" path="res://assets/slinghot_front.png" id="5_eow3j"]
+[ext_resource type="Script" uid="uid://dyr6w6gaj82jm" path="res://scripts/slingshot.gd" id="5_j5wjh"]
 [ext_resource type="PackedScene" uid="uid://crm83q850hg38" path="res://Entities/fennec_fox.tscn" id="6_ryrav"]
 
 [sub_resource type="Gradient" id="Gradient_feb5d"]
@@ -139,10 +141,10 @@ z_index = -100
 position = Vector2(584, 264)
 texture = SubResource("GradientTexture2D_fc0e3")
 
-[node name="Bird" parent="." node_paths=PackedStringArray("sling_point") instance=ExtResource("1_80nbo")]
-z_index = 10
+[node name="Bird" parent="." node_paths=PackedStringArray("sling_point", "sling_shot") instance=ExtResource("1_80nbo")]
 position = Vector2(528, 174)
 sling_point = NodePath("../Marker2D")
+sling_shot = NodePath("../Slingshot")
 
 [node name="Floor" parent="." instance=ExtResource("2_e2o6t")]
 position = Vector2(8, 640)
@@ -154,6 +156,27 @@ tile_set = SubResource("TileSet_7jktm")
 [node name="Slingshot" type="Sprite2D" parent="."]
 position = Vector2(160, 336)
 texture = ExtResource("4_fc0e3")
+script = ExtResource("5_j5wjh")
+
+[node name="SlinghotFront" type="Sprite2D" parent="Slingshot"]
+z_index = 2
+texture = ExtResource("5_eow3j")
+
+[node name="LeftLine" type="Line2D" parent="Slingshot"]
+z_index = 2
+position = Vector2(-34, -34)
+points = PackedVector2Array(6, -3, -62, -6)
+closed = true
+width = 6.0
+default_color = Color(0.36862746, 0.34901962, 0.19215687, 1)
+
+[node name="RightLine" type="Line2D" parent="Slingshot"]
+z_index = -1
+position = Vector2(13, -38)
+points = PackedVector2Array(0, 0, -77, -10)
+closed = true
+width = 6.0
+default_color = Color(0.36862746, 0.34901962, 0.19215687, 1)
 
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(160, 297)
@@ -175,3 +198,6 @@ position = Vector2(568, 344)
 
 [node name="FennecFox" parent="." instance=ExtResource("6_ryrav")]
 position = Vector2(576, 216)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(432, 243)

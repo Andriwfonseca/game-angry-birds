@@ -9,6 +9,7 @@
 radius = 23.0
 
 [node name="Bird" type="RigidBody2D"]
+z_index = 1
 input_pickable = true
 freeze = true
 script = ExtResource("1_ldtqw")

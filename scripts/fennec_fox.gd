@@ -5,25 +5,42 @@ extends RigidBody2D
 # Quanto maior o valor, mais forte precisa ser o impacto
 const UNALIVE_IMPACT = 120
 
+# ===== INICIALIZAÇÃO =====
+func _ready() -> void:
+	# CRÍTICO: Habilita o monitoramento de contatos
+	# Sem isso, get_colliding_bodies() sempre retorna lista vazia!
+	contact_monitor = true
+
+	# Define quantos contatos simultâneos serão rastreados
+	# Valor padrão é 0, precisamos de pelo menos 1
+	max_contacts_reported = 10
+
 # ===== PROCESSAMENTO DE FÍSICA =====
 # Chamado a cada frame de física (normalmente 60x por segundo)
 func _physics_process(_delta: float) -> void:
 	# Verifica se há ALGUM corpo colidindo com a raposa
-	# get_colliding_bodies() retorna uma lista de todos os corpos em contato
+	# get_colliding_bodies() retorna TODOS os tipos de corpos em contato:
+	# - RigidBody2D (objetos com física como o pássaro)
+	# - StaticBody2D (objetos estáticos como paredes, chão)
+	# - CharacterBody2D (personagens controláveis)
+	# - Qualquer outro corpo físico
 	# is_empty() retorna true se a lista está vazia (sem colisões)
 	# not inverte: "se NÃO está vazio" = "se há colisões"
 	if not get_colliding_bodies().is_empty():
 		# Percorre CADA corpo que está colidindo com a raposa
+		# IMPORTANTE: Isso NÃO filtra tipos, detecta QUALQUER corpo!
 		for i in get_colliding_bodies():
 			# Variável para guardar a velocidade do corpo que está colidindo
 			var body_velocity: Vector2
 
-			# Verifica se o corpo colidindo é um RigidBody2D (corpo físico)
+			# Verifica APENAS para saber COMO pegar a velocidade:
+			# - RigidBody2D TEM velocidade própria (pode estar se movendo)
+			# - Outros corpos geralmente são estáticos (velocidade zero)
 			if i is RigidBody2D:
-				# Se for, pega a velocidade linear (direção e força do movimento)
+				# Se for RigidBody2D, pega a velocidade real do objeto
 				body_velocity = i.linear_velocity
 			else:
-				# Se não for (por exemplo, um chão estático), velocidade é zero
+				# Se for StaticBody2D, chão, parede, etc = não tem velocidade
 				body_velocity = Vector2.ZERO
 
 			# Calcula a DIFERENÇA de velocidade entre a raposa e o objeto
